@@ -9,10 +9,10 @@ const { ValidationError } = require('sequelize');
 
 
 const { environment } = require('./config');
+// backend/app.js
+const router = require('./routes');
 const isProduction = environment === 'production';
 
-// backend/app.js
-const routes = require('./routes');
 
 const app = express();
 
@@ -48,7 +48,7 @@ if (!isProduction) {
 
 
 
-app.use(routes); // Connect all the routes
+app.use(router); // Connect all the routes
 
 app.use((_req, _res, next) => {
   const err = new Error("The requested resource couldn't be found.");
