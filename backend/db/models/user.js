@@ -24,11 +24,20 @@ module.exports = (sequelize, DataTypes) => {
       },
       email: {
         type: DataTypes.STRING,
+        unique: true,
         allowNull: false,
         validate: {
           len: [3, 256],
           isEmail: true
         }
+      },
+      firstName: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      lastName: {
+        type: DataTypes.STRING,
+        allowNull: false,
       },
       hashedPassword: {
         type: DataTypes.STRING.BINARY,
