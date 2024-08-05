@@ -1,6 +1,6 @@
 const express = require('express');
 const bcrypt = require('bcryptjs');
-const { check } = require('express-validator');
+const { body, check } = require('express-validator');
 
 const { handleValidationErrors } = require('../../utils/validation');
 const { setTokenCookie, requireAuth } = require('../../utils/auth');
@@ -28,6 +28,13 @@ const validateSignup = [
   handleValidationErrors
 ];
 
+const validateUser = [
+  body('username').notEmpty().withMessage('Username is required'),
+  body('email').isEmail().withMessage('Valid email is required'),
+  body('firstName').notEmpty().withMessage('First name is required'),
+  body('lastName').notEmpty().withMessage('Last name is required'),
+];
+
 // Sign up
 router.post(
     '/', validateSignup, async (req, res) => {
@@ -49,6 +56,47 @@ router.post(
       });
     }
   );
+
+  // Route to create a new user
+router.post('/', validateUser, async (req, res) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() });
+  }
+
+  const { username, email, password, firstName, lastName } = req.body;
+
+  try {
+    // Check if username or email already exists
+    const existingUser = await User.findOne({
+      where: {
+        [Op.or]: [{ username }, { email }],
+      },
+    });
+
+    if (existingUser) {
+      return res.status(500).json({ error: 'Username or email already exists' });
+    }
+
+    // Create new user
+    const newUser = await User.create({
+      username,
+      email,
+      password,
+      firstName,
+      lastName,
+    });
+
+    return res.status(201).json({
+      id: newUser.id,
+      firstName: newUser.firstName,
+      lastName: newUser.lastName,
+      email: newUser.email,
+    });
+  } catch (error) {
+    return res.status(500).json({ error: 'An error occurred while creating the user' });
+  }
+});
   // router.get('/api/users/:id', requireAuth, async (req, res) => {
   //   const user = await User.findByPk(req.params.id);
   //   console.log(user)

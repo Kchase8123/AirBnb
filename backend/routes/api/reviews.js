@@ -7,6 +7,8 @@ const { setTokenCookie, requireAuth } = require('../../utils/auth');
 const { Booking , Spot, Review, Image, User} = require('../../db/models');
 const router = express.Router();
 
+const validateReview = []
+
 // router.post('/api/spots/:spotId/reviews', async (req, res) => {
 //     const review = await Review.create({
 //       ...req.body,

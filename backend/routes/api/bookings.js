@@ -8,6 +8,8 @@ const { Booking , Spot, Review, Image, User} = require('../../db/models');
 
 const router = express.Router();
 
+const validateBooking = []
+
 // router.post('/api/spots/:spotId/bookings', async (req, res) => {
 //     const booking = await Booking.create({
 //       ...req.body,
