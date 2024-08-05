@@ -4,8 +4,7 @@ const { check } = require('express-validator');
 
 const { handleValidationErrors } = require('../../utils/validation');
 const { setTokenCookie, requireAuth } = require('../../utils/auth');
-const { Review } = require('../../db/models');
-
+const { Booking , Spot, Review, Image, User} = require('../../db/models');
 const router = express.Router();
 
 // router.post('/api/spots/:spotId/reviews', async (req, res) => {

@@ -1,5 +1,11 @@
 'use strict';
-/** @type {import('sequelize-cli').Migration} */
+
+const { sequelize } = require("../models");
+
+let options = {};
+if (process.env.NODE_ENV === 'production') {
+  options.schema = process.env.SCHEMA;  // define your schema in options object
+}
 module.exports = {
   async up(queryInterface, Sequelize) {
     await queryInterface.createTable('Bookings', {
@@ -12,12 +18,14 @@ module.exports = {
       spotId: {
         type: Sequelize.INTEGER,
         allowNull: false,
-        references: { model: 'Spots', key: 'id' }
+        references: { model: 'Spots'},
+        onDelete: "CASCADE"
       },
       userId: {
         type: Sequelize.INTEGER,
         allowNull: false,
-        references: { model: 'Users', key: 'id' }
+        references: { model: 'Users'},
+        onDelete: "CASCADE"
       },
       startDate: {
         type: Sequelize.DATE,
@@ -38,9 +46,10 @@ module.exports = {
         defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
         onUpdate: Sequelize.literal('CURRENT_TIMESTAMP')
       }
-    });
+    }, options);
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('Bookings');
+    options.tableName = "Bookings"
+    return queryInterface.dropTable(options);
   }
 };
