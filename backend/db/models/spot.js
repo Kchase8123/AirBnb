@@ -1,19 +1,18 @@
 'use strict';
-const {Model} = require('sequelize');
-const { FOREIGNKEYS } = require('sequelize/lib/query-types');
+
+const { Model } = require('sequelize');
+
 module.exports = (sequelize, DataTypes) => {
   class Spot extends Model {
-    /**
-     * Helper method for defining associations.
-     * This method is not a part of Sequelize lifecycle.
-     * The `models/index` file will call this method automatically.
-     */
     static associate(models) {
-      // define association here
-      Spot.belongsTo(User, { foreignKey: 'ownerId' });
-      Spot.hasMany(Review, { foreignKey: 'spotId' });
-      Spot.hasMany(Booking, { foreignKey: 'spotId' });
-      Spot.hasMany(Image, {
+
+      Spot.belongsTo(models.User, { foreignKey: 'ownerId' });
+
+      Spot.hasMany(models.Review, { foreignKey: 'spotId' });
+
+      Spot.hasMany(models.Booking, { foreignKey: 'spotId' });
+
+      Spot.hasMany(models.Image, {
         foreignKey: 'imageableId',
         constraints: false,
         scope: {
@@ -24,7 +23,9 @@ module.exports = (sequelize, DataTypes) => {
   }
   Spot.init({
     ownerId: {
-      type: DataTypes.INTEGER
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      references: { model: ['Users', 'Bookings'], key: 'id' }
     },
     address: {
       type: DataTypes.STRING(255),
@@ -64,7 +65,7 @@ module.exports = (sequelize, DataTypes) => {
     }
   }, {
     sequelize,
-    modelName: 'Spots',
+    modelName: 'Spot',
   });
   return Spot;
 };

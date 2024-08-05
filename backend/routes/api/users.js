@@ -49,6 +49,23 @@ router.post(
       });
     }
   );
+  // router.get('/api/users/:id', requireAuth, async (req, res) => {
+  //   const user = await User.findByPk(req.params.id);
+  //   console.log(user)
+  //   res.json(user);
+  // });
+
+  // router.put('/api/users/:id', async (req, res) => {
+  //   const user = await User.findByPk(req.params.id);
+  //   await user.update(req.body);
+  //   res.json(user);
+  // });
+
+  // router.delete('/api/users/:id', async (req, res) => {
+  //   const user = await User.findByPk(req.params.id);
+  //   await user.destroy();
+  //   res.sendStatus(204);
+  // });
 
 
 module.exports = router;
